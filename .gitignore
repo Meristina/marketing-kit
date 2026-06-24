@@ -1,0 +1,18 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+*.whl
+.venv/
+venv/
+
+# OS
+.DS_Store
+
+# Internal local-only build log (never published)
+_ETAT_AVANCEMENT.md
+
+# Mission outputs (user data)
+missions/
