@@ -22,6 +22,17 @@ import os
 
 from agents import WebSearchTool, function_tool
 
+# Gemini / OpenRouter / any OpenAI-compatible endpoint implements /chat/completions, NOT the
+# Agents SDK's default /responses API (which 404s there). When a custom OPENAI_BASE_URL is set,
+# force chat-completions. (No-op under the test stub / if the symbol is absent.)
+if os.getenv("OPENAI_BASE_URL"):
+    try:
+        from agents import set_default_openai_api
+
+        set_default_openai_api("chat_completions")
+    except Exception:
+        pass
+
 
 def _gemini_key():
     return os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
@@ -157,4 +168,9 @@ def web_tools() -> list:
         return [tavily_web_search]
     if _gemini_key():
         return [gemini_web_search]
+    # OpenAI's hosted WebSearchTool only works on OpenAI's own platform. If a custom base URL is
+    # set (Gemini / OpenRouter / any compat endpoint), fall back to DuckDuckGo (free function-tool)
+    # rather than a hosted tool that the endpoint can't run.
+    if os.getenv("OPENAI_BASE_URL"):
+        return [duckduckgo_web_search]
     return [WebSearchTool()]

@@ -30,7 +30,8 @@ def _load_dotenv() -> None:
                 if not s or s.startswith("#") or "=" not in s:
                     continue
                 k, _, v = s.partition("=")
-                k, v = k.strip(), v.strip().strip('"').strip("'")
+                k = k.strip()
+                v = v.split(" #", 1)[0].strip().strip('"').strip("'")  # drop trailing ` # comment`
                 if k and v and v != "REPLACE_ME":
                     os.environ[k] = v
             return
