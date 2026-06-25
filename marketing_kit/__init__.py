@@ -1,7 +1,7 @@
 """Marketing-Kit — generalist marketing army (OpenAI Agents SDK port).
 
-Commander -> 5 Officers (Research, Strategy, Plan, Create, Measure) -> Soldiers
-(one per method) + a transverse Inspector (sources / compliance / quality, veto).
+Commander -> 6 Officers (Research, Strategy, Brand, Demand, Lifecycle, Measure) ->
+Soldiers (one per method) + a transverse Inspector (sources / compliance / quality, veto).
 Same blueprint as Solve-Kit, applied to the marketing strategy/campaign lifecycle.
 """
 

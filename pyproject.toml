@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "marketing-kit"
+version = "0.1.0"
+description = "Marketing-Kit — a generalist, sector-agnostic marketing agent army (OpenAI Agents SDK port), portable with the Claude agents/skills mirror."
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "MIT" }
+dependencies = ["openai-agents"]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+# Non-OpenAI providers (Anthropic, Gemini, local, …) for the Python runtime,
+# via MK_ELITE_MODEL / MK_STANDARD_MODEL = "litellm/<provider>/<model>".
+litellm = ["openai-agents[litellm]"]
+
+[project.scripts]
+marketing = "marketing_cli.cli:main"
+marketing-kit-mission = "marketing_kit.mission:main"
+
+[tool.setuptools.packages.find]
+include = ["marketing_kit*", "marketing_cli*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
