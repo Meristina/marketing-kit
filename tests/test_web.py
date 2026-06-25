@@ -8,7 +8,8 @@ returns before any API call.
 
 from marketing_kit import web  # the `agents` SDK is stubbed in tests/conftest.py
 
-_ENV = ("MK_WEBSEARCH", "MK_SEARCH", "GEMINI_API_KEY", "GOOGLE_API_KEY", "TAVILY_API_KEY")
+_ENV = ("MK_WEBSEARCH", "MK_SEARCH", "GEMINI_API_KEY", "GOOGLE_API_KEY", "TAVILY_API_KEY",
+        "OPENAI_BASE_URL")
 
 
 def _clear(monkeypatch):
@@ -72,10 +73,17 @@ def test_auto_default_openai_hosted(monkeypatch):
     assert len(tools) == 1 and type(tools[0]).__name__ == "WebSearchTool"
 
 
-def test_ddg_is_opt_in_only_not_auto(monkeypatch):
-    # DDG is unofficial -> never auto-selected; only via explicit MK_SEARCH=ddg
+def test_ddg_not_auto_on_openai(monkeypatch):
+    # on OpenAI (no custom base URL), DDG is never auto-selected -> hosted WebSearchTool
     _clear(monkeypatch)
     assert web.web_tools() != [web.duckduckgo_web_search]
+
+
+def test_custom_base_url_auto_falls_back_to_ddg(monkeypatch):
+    # OpenAI's hosted search can't run on a compat endpoint -> auto uses DDG instead
+    _clear(monkeypatch)
+    monkeypatch.setenv("OPENAI_BASE_URL", "https://generativelanguage.googleapis.com/v1beta/openai/")
+    assert web.web_tools() == [web.duckduckgo_web_search]
 
 
 # ---- graceful no-key path (no network: returns before any API call) ---------
