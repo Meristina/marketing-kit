@@ -61,8 +61,8 @@ a configured provider; the test suite does not (it stubs the SDK).
 - Every soldier has a `handoff_description`; every soldier is wired into ≥1 officer; the commander
   wires all 6 officers + the inspector. (`tests/test_structure.py` enforces all of this.)
 - `pytest` green.
-- When you change tests, review them with the **`test-guard`** skill (`.claude/skills/test-guard/`)
-  before committing.
+- When you change tests, review them with the **`test-guard`** skill before committing (optional,
+  local tooling — install with `npx skills add amElnagdy/guard-skills --skill test-guard`).
 
 ## Layout
 

@@ -16,3 +16,6 @@ _ETAT_AVANCEMENT.md
 
 # Mission outputs (user data)
 missions/
+
+# Local-only vendored review skills (third-party tooling — install per-dev, not committed)
+.claude/skills/
