@@ -7,7 +7,7 @@ a transverse **Inspector** with veto power. **No invented facts**: every unit re
 internet and cites sources; the Inspector verifies sources, compliance, and quality before
 anything ships.
 
-Built on the same blueprint as [Solve-Kit](../solve-kit), applied to the marketing
+Built on the same blueprint as [Solve-Kit](https://github.com/Meristina/solve-kit), applied to the marketing
 strategy/campaign lifecycle. **Portable**: every unit exists twice — `agents/*.md` (the
 agent-harness mirror: Claude, Codex, Cursor, Copilot, Gemini, OpenCode) and
 `marketing_kit/**/*.py` (the reference engine on the Agents SDK) — with the procedures in
