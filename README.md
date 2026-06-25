@@ -53,11 +53,16 @@ LiteLLM extra), so this is not tied to a single vendor.
 
 ```bash
 pip install -e .                 # or:  pip install -e ".[litellm]"
-export OPENAI_API_KEY=sk-...     # or the keys your configured provider needs
+cp .env.example .env             # then put your keys in .env (gitignored — never committed)
 python -m marketing_kit.mission "Grow trial signups for our B2B analytics product in MENA"
 # or, equivalent:
 marketing-kit-mission "..."
 ```
+
+Secrets live in a local **`.env`** (gitignored, never committed): `OPENAI_API_KEY`, optional
+`OPENAI_BASE_URL` (e.g. OpenRouter or any OpenAI-compatible endpoint), and model overrides
+(`MK_ELITE_MODEL` / `MK_STANDARD_MODEL`). It loads automatically (dependency-free) and its values
+override the shell for this project. On Python 3.9 the SDK also needs `pip install eval_type_backport`.
 
 `marketing_kit/mission.py` is the deterministic runner: it carries a **Mission Dossier**, runs
 the army in two stages — **STRATEGISE** (Phases 0–2) → **BUILD** (Phases 3–6) — runs the

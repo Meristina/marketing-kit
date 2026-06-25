@@ -19,3 +19,8 @@ missions/
 
 # Local-only vendored review skills (third-party tooling — install per-dev, not committed)
 .claude/skills/
+
+# Secrets — API keys, never committed. The .env.example template IS committed.
+.env
+.env.*
+!.env.example
