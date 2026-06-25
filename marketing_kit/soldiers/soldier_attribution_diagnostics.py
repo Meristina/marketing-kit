@@ -10,9 +10,10 @@ Reconciles against incrementality + MMM. Grounded in Gordon, Moakler & Zettelmey
 observational/last-touch overstate lift ~5-13x. Researches every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 ATTRIBUTION_INSTRUCTIONS = """
 You are the ATTRIBUTION DIAGNOSTICS soldier in Officer 6's Measurement & Effectiveness squad. One
@@ -64,5 +65,5 @@ attribution_soldier = Agent(
     handoff_description="Attribution as a BIASED tactical diagnostic (relative signal only; reconciled vs incrementality/MMM, never the verdict).",
     instructions=ATTRIBUTION_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ CLV with holdouts -- honestly framed against the evidence that growth is mostly 
 loyalty. Researches every rate via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 LIFECYCLE_CRM_INSTRUCTIONS = """
 You are the LIFECYCLE / CRM / EMAIL soldier in Officer 5's Lifecycle & Retention squad. One
@@ -64,5 +65,5 @@ lifecycle_crm_soldier = Agent(
     handoff_description="Owned-channel lifecycle program (triggered journeys, consented, holdout-measured retention/CLV).",
     instructions=LIFECYCLE_CRM_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

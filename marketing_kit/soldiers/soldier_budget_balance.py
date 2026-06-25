@@ -11,9 +11,10 @@ counter-critique, then resolves transparently. The split is a contested default,
 Researches every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 BUDGET_BALANCE_INSTRUCTIONS = """
 You are the BUDGET-BALANCE soldier in Officer 6's Measurement & Effectiveness squad. One method,
@@ -69,5 +70,5 @@ budget_balance_soldier = Agent(
     handoff_description="Brand:activation split + ESOV sizing, with the Binet&Field<->Sharp dispute encoded and resolved (elite).",
     instructions=BUDGET_BALANCE_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

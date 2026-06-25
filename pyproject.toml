@@ -13,6 +13,9 @@ dependencies = ["openai-agents"]
 
 [project.optional-dependencies]
 dev = ["pytest"]
+# Gemini-powered web search (Google AI Studio grounding) — works with ANY brain model.
+# Set GEMINI_API_KEY and the soldiers research via Gemini instead of OpenAI's hosted tool.
+gemini = ["google-genai"]
 # Non-OpenAI providers (Anthropic, Gemini, local, …) for the Python runtime,
 # via MK_ELITE_MODEL / MK_STANDARD_MODEL = "litellm/<provider>/<model>".
 litellm = ["openai-agents[litellm]"]

@@ -10,9 +10,10 @@ operating cadence. Framed as operational best-practice -- the supporting EVIDENC
 on mechanism, not borrowed stats. Researches/verifies every number via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 REVOPS_INSTRUCTIONS = """
 You are the REVOPS ALIGNMENT soldier in Officer 5's Lifecycle & Retention squad. One method, done
@@ -66,5 +67,5 @@ revops_soldier = Agent(
     handoff_description="Sales-marketing-CS alignment: shared definitions + SLAs + closed-loop spine + unified metrics (best-practice, thin evidence).",
     instructions=REVOPS_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -8,44 +8,11 @@ control-flow branches: PROCEED->PASS, STEER->loop, and VETO->iteration cap.
 
 NB: unlike Solve-Kit there is NO mandatory HITL gate here — the Direction Check is optional
 and non-blocking (default auto_proceed), so there is no NO-GO branch.
+
+The `agents` SDK is stubbed in tests/conftest.py (shared, installed before any test imports).
 """
 
-import sys
-import types
-
-# ---- Stub the openai-agents SDK surface BEFORE importing the package ----------
-_fake = types.ModuleType("agents")
-
-
-class _Agent:
-    def __init__(self, *a, **k):
-        self.name = k.get("name")
-        self.model = k.get("model")
-        self.tools = k.get("tools", [])
-
-    def as_tool(self, *a, **k):
-        return {"tool_name": k.get("tool_name")}
-
-
-class _WebSearchTool:
-    def __init__(self, *a, **k):
-        pass
-
-
-class _Runner:
-    @staticmethod
-    def run_sync(agent, inp):  # replaced per-test via ScriptedRunner
-        raise RuntimeError("Runner.run_sync not scripted")
-
-
-_fake.Agent = _Agent
-_fake.WebSearchTool = _WebSearchTool
-_fake.Runner = _Runner
-# Force the stub (not setdefault): the harness test always drives the engine via a scripted
-# Runner, so it must use the fake regardless of whether a real `agents` SDK got imported first.
-sys.modules["agents"] = _fake
-
-from marketing_kit import mission  # noqa: E402  (import after stubbing)
+from marketing_kit import mission
 
 
 class _Result:

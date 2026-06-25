@@ -15,9 +15,10 @@ Squad — COMPLETE (6 tools: 5 new + 1 shared):
   soldier-lead-scoring-lifecycle 🔵  [BUILT]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_value_prop_design import value_prop_soldier  # shared with O2
 from ..soldiers.soldier_full_funnel_paid_media import full_funnel_soldier
 from ..soldiers.soldier_conversion_cro import conversion_cro_soldier
@@ -74,7 +75,7 @@ officer_4 = Agent(
     instructions=OFFICER_4_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         value_prop_soldier.as_tool(
             tool_name="value_prop_design",
             tool_description="Value Proposition Canvas: the promise behind activation "

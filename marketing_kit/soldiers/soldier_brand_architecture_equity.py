@@ -10,9 +10,10 @@ Aaker's equity assets + architecture spectrum. Researches every figure via WebSe
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 BRAND_EQUITY_INSTRUCTIONS = """
 You are the BRAND ARCHITECTURE & EQUITY soldier in Officer 2's Strategy & Positioning squad.
@@ -62,5 +63,5 @@ brand_equity_soldier = Agent(
     handoff_description="Brand portfolio structure + CBBE/Aaker equity diagnosis + equity to build (elite).",
     instructions=BRAND_EQUITY_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

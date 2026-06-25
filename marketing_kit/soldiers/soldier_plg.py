@@ -10,9 +10,10 @@ self-serve funnel, the monetisation fence, and the growth loops. Honest about PL
 Researches every rate via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 PLG_INSTRUCTIONS = """
 You are the PLG soldier in Officer 4's Demand & Activation squad. One method, done well: make
@@ -63,5 +64,5 @@ plg_soldier = Agent(
     handoff_description="Product-led growth motion: aha moment + self-serve funnel + monetisation fence + loops (elite).",
     instructions=PLG_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ the implied weight + modifiers; calibrates with MMM (O6) and surfaces the Sharp 
 Researches every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 ESOV_INSTRUCTIONS = """
 You are the ESOV / SOV soldier in Officer 3's Brand-Building squad. One method, done well:
@@ -58,5 +59,5 @@ esov_sov_soldier = Agent(
     handoff_description="ESOV = SOV-SOM media-weight planning (hedged correlation, MMM-calibrated; elite).",
     instructions=ESOV_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

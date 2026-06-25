@@ -9,9 +9,10 @@ advertising law for the detected market, (c) quality via devil's-advocate-then-c
 PASS / PASS-WITH-FIXES / VETO and re-inspects after fixes. Audit only — it never authors the fix.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from .models import ELITE
+from .web import web_tools
 
 INSPECTOR_INSTRUCTIONS = """
 You are the INSPECTOR: a single elite unit outside the phase chain that guards what leaves the
@@ -72,5 +73,5 @@ inspector = Agent(
     handoff_description="End-of-loop quality gate: sources, compliance (data/ad law), devil's-advocate quality -- veto power.",
     instructions=INSPECTOR_INSTRUCTIONS,
     model=ELITE,  # elite: adversarial verification and source-checking is the hardest reasoning
-    tools=[WebSearchTool()],  # internet to verify every factual claim it audits
+    tools=web_tools(),  # internet to verify every factual claim it audits
 )

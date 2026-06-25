@@ -13,9 +13,10 @@ Squad — COMPLETE (4/4):
   soldier-revops-alignment      🔵  [BUILT — thin evidence, on judgment]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_lifecycle_crm_email import lifecycle_crm_soldier
 from ..soldiers.soldier_first_party_cdp import cdp_soldier
 from ..soldiers.soldier_retention_loyalty import retention_loyalty_soldier
@@ -68,7 +69,7 @@ officer_5 = Agent(
     instructions=OFFICER_5_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         lifecycle_crm_soldier.as_tool(
             tool_name="lifecycle_crm_email",
             tool_description="Owned-channel lifecycle program (triggered journeys, consented, "

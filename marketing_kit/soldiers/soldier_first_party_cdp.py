@@ -11,9 +11,10 @@ FLAGGED AS DATED (pre-2023) and re-verified against current practice. Researches
 claim via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 FIRST_PARTY_CDP_INSTRUCTIONS = """
 You are the FIRST-PARTY DATA & CDP soldier in Officer 5's Lifecycle & Retention squad. One method,
@@ -67,5 +68,5 @@ cdp_soldier = Agent(
     handoff_description="Consented first-party data + CDP architecture (identity, governance, post-cookie freshness-checked; elite).",
     instructions=FIRST_PARTY_CDP_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

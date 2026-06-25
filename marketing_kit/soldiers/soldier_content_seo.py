@@ -10,9 +10,10 @@ Covers classic search + AI/answer engines. Measures outcomes, not vanity traffic
 every keyword/traffic figure via WebSearchTool; invents nothing; never guarantees rankings.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 CONTENT_SEO_INSTRUCTIONS = """
 You are the CONTENT & SEO soldier in Officer 4's Demand & Activation squad. One method, done
@@ -63,5 +64,5 @@ content_seo_soldier = Agent(
     handoff_description="Organic demand: intent-mapped topic clusters + E-E-A-T content + technical SEO (outcomes, not vanity).",
     instructions=CONTENT_SEO_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -12,9 +12,10 @@ and the value proposition. Reuses JTBD + segment inputs. Researches every benefi
 the hosted WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 VALUE_PROP_INSTRUCTIONS = """
 You are the VALUE PROPOSITION DESIGN soldier, SHARED by Officer 2 (strategy) and Officer 4
@@ -61,5 +62,5 @@ value_prop_soldier = Agent(
     handoff_description="Value Proposition Canvas fit (jobs/pains/gains vs relievers/creators) + the value prop (shared O2+O4).",
     instructions=VALUE_PROP_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

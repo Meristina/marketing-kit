@@ -10,9 +10,10 @@ closed-loop feedback). Connects demand to retention (O5) and revenue. Researches
 rate via WebSearchTool or flags it a hypothesis; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 LEAD_SCORING_INSTRUCTIONS = """
 You are the LEAD SCORING & LIFECYCLE soldier in Officer 4's Demand & Activation squad. One
@@ -65,5 +66,5 @@ lead_scoring_soldier = Agent(
     handoff_description="Lifecycle stages + lead scoring (fit x engagement x PQL) + marketing->sales handoff & closed loop.",
     instructions=LEAD_SCORING_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

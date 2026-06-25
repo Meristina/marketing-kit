@@ -15,9 +15,10 @@ Squad — COMPLETE (6/6):
   soldier-creator-influencer    🔵  [BUILT]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_mental_availability import mental_availability_soldier
 from ..soldiers.soldier_emotional_creative import emotional_creative_soldier
 from ..soldiers.soldier_esov_sov import esov_sov_soldier
@@ -77,7 +78,7 @@ officer_3 = Agent(
     instructions=OFFICER_3_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         mental_availability_soldier.as_tool(
             tool_name="mental_availability",
             tool_description="Distinctive-asset audit (fame x uniqueness) + CEP links to "

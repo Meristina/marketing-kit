@@ -10,9 +10,10 @@ truth & substantiation check on every factual element. Researches/verifies via W
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 NARRATIVE_INSTRUCTIONS = """
 You are the NARRATIVE & STORY soldier in Officer 3's Brand-Building squad. One method, done
@@ -59,5 +60,5 @@ narrative_soldier = Agent(
     handoff_description="Durable brand narrative (customer-as-hero) + story system, substantiation-checked.",
     instructions=NARRATIVE_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ with Dunford's evidence-built components. Sharpens the anchor STP hands it; does
 the target. Researches every proof point via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 POSITIONING_INSTRUCTIONS = """
 You are the POSITIONING soldier in Officer 2's Strategy & Positioning squad. One method,
@@ -60,5 +61,5 @@ positioning_soldier = Agent(
     handoff_description="Sharp, defensible positioning statement + the word/idea to own (Ries&Trout/Dunford; elite).",
     instructions=POSITIONING_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

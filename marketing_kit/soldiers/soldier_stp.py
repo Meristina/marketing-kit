@@ -11,9 +11,10 @@ Hands the anchor to the positioning soldier. Researches every figure via WebSear
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 STP_INSTRUCTIONS = """
 You are the STP soldier in Officer 2's Strategy & Positioning squad. One method, done well:
@@ -55,5 +56,5 @@ stp_soldier = Agent(
     handoff_description="The targeting decision + positioning anchor (reuses the segment map; elite).",
     instructions=STP_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

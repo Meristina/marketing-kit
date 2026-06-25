@@ -10,9 +10,10 @@ exploratory: output is a hypothesis engine, never evidence and never a substitut
 users. Grounds the persona in real (sourced) research; ends with a validation plan.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 AI_SYNTHETIC_AUDIENCE_INSTRUCTIONS = """
 You are the AI SYNTHETIC-AUDIENCE soldier in Officer 1's Insight & Research squad. One
@@ -59,5 +60,5 @@ ai_synthetic_audience_soldier = Agent(
     handoff_description="LLM-simulated persona probe -> message/objection HYPOTHESES (exploratory; validate on real users).",
     instructions=AI_SYNTHETIC_AUDIENCE_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

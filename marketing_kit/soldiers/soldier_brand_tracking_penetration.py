@@ -11,9 +11,10 @@ and closes the loop to brand-building (O3). Grounded in Ehrenberg-Bass. Research
 WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 BRAND_TRACKING_INSTRUCTIONS = """
 You are the BRAND TRACKING & PENETRATION soldier in Officer 6's Measurement & Effectiveness squad.
@@ -67,5 +68,5 @@ brand_tracking_soldier = Agent(
     handoff_description="Longitudinal brand-health tracking on penetration + mental availability (double-jeopardy lens; not causal; elite).",
     instructions=BRAND_TRACKING_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ an overall verdict and strategic implications. Structure, not a competitor list.
 every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 PORTER_INSTRUCTIONS = """
 You are the FIVE FORCES soldier in Officer 2's Strategy & Positioning squad. One method,
@@ -59,5 +60,5 @@ porter_soldier = Agent(
     handoff_description="Industry structural attractiveness via the five forces (H/M/L + verdict + implications).",
     instructions=PORTER_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

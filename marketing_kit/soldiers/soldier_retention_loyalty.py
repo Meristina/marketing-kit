@@ -10,9 +10,10 @@ Honest about the evidence (growth is mostly penetration, not loyalty). Researche
 WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 RETENTION_LOYALTY_INSTRUCTIONS = """
 You are the RETENTION & LOYALTY soldier in Officer 5's Lifecycle & Retention squad. One method,
@@ -64,5 +65,5 @@ retention_loyalty_soldier = Agent(
     handoff_description="Churn diagnosis + value-at-risk retention + (justified) loyalty, measured by incremental lift.",
     instructions=RETENTION_LOYALTY_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

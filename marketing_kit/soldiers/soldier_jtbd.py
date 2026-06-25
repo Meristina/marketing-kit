@@ -10,9 +10,10 @@ competing alternatives. Researches every external fact via the hosted WebSearchT
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 JTBD_INSTRUCTIONS = """
 You are the JTBD soldier in Officer 1's Insight & Research squad. One method, done well:
@@ -48,5 +49,5 @@ jtbd_soldier = Agent(
     handoff_description="The customer's job-to-be-done + forces of progress + real rivals (elite).",
     instructions=JTBD_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ attribution bias. Grounded in Gordon, Moakler & Zettelmeyer (2023): observationa
 overstate lift ~5-13x. Researches every effect size via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 INCREMENTALITY_INSTRUCTIONS = """
 You are the INCREMENTALITY soldier in Officer 6's Measurement & Effectiveness squad. One method,
@@ -68,5 +69,5 @@ incrementality_soldier = Agent(
     handoff_description="Causal lift via geo/experiment design (the truth layer that calibrates MMM, exposes attribution bias; elite).",
     instructions=INCREMENTALITY_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

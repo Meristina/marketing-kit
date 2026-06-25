@@ -10,9 +10,10 @@ Romaniuk (How Brands Grow 2). Researches every external fact via the hosted WebS
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 CEP_INSTRUCTIONS = """
 You are the CEP soldier in Officer 1's Insight & Research squad. One method, done well:
@@ -54,5 +55,5 @@ cep_soldier = Agent(
     handoff_description="Buying-situation CEP map + priorities to grow mental availability (elite).",
     instructions=CEP_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

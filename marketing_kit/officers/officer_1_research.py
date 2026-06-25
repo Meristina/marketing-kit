@@ -14,9 +14,10 @@ Squad — COMPLETE (5/5):
   soldier-ai-synthetic-audience 🔵  [BUILT]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_jtbd import jtbd_soldier
 from ..soldiers.soldier_category_entry_points import cep_soldier
 from ..soldiers.soldier_persona_segmentation import persona_segmentation_soldier
@@ -63,7 +64,7 @@ officer_1 = Agent(
     instructions=OFFICER_1_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         jtbd_soldier.as_tool(
             tool_name="jtbd",
             tool_description="Jobs-to-be-Done: the customer's job (functional/emotional/"

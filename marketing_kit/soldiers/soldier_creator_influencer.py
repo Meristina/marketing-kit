@@ -10,9 +10,10 @@ association, borrowed trust), NOT a last-click performance channel. Grounded in 
 figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 CREATOR_INFLUENCER_INSTRUCTIONS = """
 You are the CREATOR / INFLUENCER soldier in Officer 3's Brand-Building squad. One method, done
@@ -63,5 +64,5 @@ creator_influencer_soldier = Agent(
     handoff_description="Creator/influencer as a long-term brand builder (IPA 2025; brand KPIs, not last-click).",
     instructions=CREATOR_INFLUENCER_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

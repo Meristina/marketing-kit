@@ -9,9 +9,10 @@ against bottom-up plus a value-theory cross-check, with assumptions, ranges, and
 Researches every figure via the hosted WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 MARKET_SIZING_INSTRUCTIONS = """
 You are the MARKET-SIZING soldier in Officer 1's Insight & Research squad. One method,
@@ -52,5 +53,5 @@ market_sizing_soldier = Agent(
     handoff_description="Defensible TAM/SAM/SOM via top-down x bottom-up triangulation, with assumptions & confidence.",
     instructions=MARKET_SIZING_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

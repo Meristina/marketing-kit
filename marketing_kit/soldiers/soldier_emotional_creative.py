@@ -10,9 +10,10 @@ an iron rule). Sets the emotional territory + durable creative platform; surface
 Sharp critique. Researches every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 EMOTIONAL_CREATIVE_INSTRUCTIONS = """
 You are the EMOTIONAL CREATIVE soldier in Officer 3's Brand-Building squad. One method, done
@@ -58,5 +59,5 @@ emotional_creative_soldier = Agent(
     handoff_description="Emotional territory + durable creative platform for long-term brand effects (Binet&Field; elite).",
     instructions=EMOTIONAL_CREATIVE_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

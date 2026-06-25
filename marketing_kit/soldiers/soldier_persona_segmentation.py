@@ -11,9 +11,10 @@ demographics) and builds evidence-based personas. Researches every size/share/st
 hosted WebSearchTool; invents nothing. Does NOT make the targeting choice (that is STP).
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 PERSONA_SEGMENTATION_INSTRUCTIONS = """
 You are the SEGMENTATION & PERSONA soldier, SHARED by Officer 1 (research) and Officer 2
@@ -60,5 +61,5 @@ persona_segmentation_soldier = Agent(
     handoff_description="MECE segment map + ranked priorities + evidence-based personas; feeds STP (shared O1+O2).",
     instructions=PERSONA_SEGMENTATION_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ links them to the priority CEPs (reused from Officer 1). Researches every figure
 WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 MENTAL_AVAILABILITY_INSTRUCTIONS = """
 You are the MENTAL AVAILABILITY soldier in Officer 3's Brand-Building squad. One method, done
@@ -60,5 +61,5 @@ mental_availability_soldier = Agent(
     handoff_description="Distinctive-asset audit (fame x uniqueness) + CEP links to build mental availability (elite).",
     instructions=MENTAL_AVAILABILITY_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

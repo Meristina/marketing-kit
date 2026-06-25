@@ -17,9 +17,10 @@ Squad — COMPLETE (5/5):
   soldier-brand-tracking-penetration 🎖️ [BUILT]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_incrementality import incrementality_soldier
 from ..soldiers.soldier_mmm import mmm_soldier
 from ..soldiers.soldier_attribution_diagnostics import attribution_soldier
@@ -81,7 +82,7 @@ officer_6 = Agent(
     instructions=OFFICER_6_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         incrementality_soldier.as_tool(
             tool_name="incrementality",
             tool_description="Geo-lift/RCT causal source of truth: measures what spend "

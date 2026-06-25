@@ -15,9 +15,10 @@ Squad — COMPLETE (6 tools: 5 new + 1 shared):
   soldier-value-prop-design        🔵  [BUILT — SHARED with Officer 4]
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 from ..soldiers.soldier_persona_segmentation import persona_segmentation_soldier  # shared with O1
 from ..soldiers.soldier_stp import stp_soldier
 from ..soldiers.soldier_positioning import positioning_soldier
@@ -73,7 +74,7 @@ officer_2 = Agent(
     instructions=OFFICER_2_INSTRUCTIONS,
     model=ELITE,  # officer-grade reasoning; mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # the officer researches too
+        *web_tools(),  # the officer researches too
         persona_segmentation_soldier.as_tool(
             tool_name="persona_segmentation",
             tool_description="Segment map + ranked priorities + personas (shared with "

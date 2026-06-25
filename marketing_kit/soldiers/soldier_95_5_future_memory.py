@@ -10,9 +10,10 @@ Institute 95-5 rule. Maps B2B CEPs (reused from O1) to future-memory building. 9
 TIMING, never a 95:5 budget split. Researches every figure via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 FUTURE_MEMORY_INSTRUCTIONS = """
 You are the 95-5 FUTURE-MEMORY soldier in Officer 3's Brand-Building squad. One method, done
@@ -59,5 +60,5 @@ future_memory_soldier = Agent(
     handoff_description="B2B future-memory building for the ~95% out-market buyers (95-5 = timing, not a budget split).",
     instructions=FUTURE_MEMORY_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

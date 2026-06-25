@@ -11,12 +11,14 @@ Entry points (mirroring Solve-Kit):
   iteration). NB: no mandatory HITL — this army produces deliverables, it doesn't spend budget.
 - this file's __main__ is a single-pass demo only.
 
-Install `openai-agents`; web access via the hosted WebSearchTool so no unit invents facts.
+Install `openai-agents`; web access via `web.web_tools()` (OpenAI hosted search, or Gemini
+Google-Search grounding with any brain — set GEMINI_API_KEY) so no unit invents facts.
 """
 
-from agents import Agent, Runner, WebSearchTool
+from agents import Agent, Runner
 
 from .models import ELITE
+from .web import web_tools
 
 # Officers and inspector are imported as they get built (one per turn).
 from .officers.officer_1_research import officer_1
@@ -63,7 +65,7 @@ commander = Agent(
     instructions=COMMANDER_INSTRUCTIONS,
     model=ELITE,  # elite tier — mirror of opus on the Claude side
     tools=[
-        WebSearchTool(),  # every unit can research; the commander too
+        *web_tools(),  # every unit can research; the commander too
         officer_1.as_tool(tool_name="research",  tool_description="Phase 1: insight & research (JTBD, CEPs, sizing)."),
         officer_2.as_tool(tool_name="strategy",  tool_description="Phase 2: strategy & positioning (STP, brand equity)."),
         officer_3.as_tool(tool_name="brand",     tool_description="Phase 3: brand-building (mental availability, ESOV)."),

@@ -10,9 +10,10 @@ incrementality-first (never last-click alone). The 60:40 split itself is O6; her
 within activation. Researches every benchmark via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 FULL_FUNNEL_INSTRUCTIONS = """
 You are the FULL-FUNNEL PAID-MEDIA soldier in Officer 4's Demand & Activation squad. One method,
@@ -63,5 +64,5 @@ full_funnel_soldier = Agent(
     handoff_description="Full-funnel paid channel mix + flighting + incrementality-first measurement (elite).",
     instructions=FULL_FUNNEL_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

@@ -10,9 +10,10 @@ Removes friction against the value prop's promise. Researches every rate via Web
 invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import STANDARD
+from ..web import web_tools
 
 CONVERSION_CRO_INSTRUCTIONS = """
 You are the CRO soldier in Officer 4's Demand & Activation squad. One method, done well: FIND
@@ -63,5 +64,5 @@ conversion_cro_soldier = Agent(
     handoff_description="Funnel leak diagnosis + prioritised CRO hypotheses + valid A/B experiment design.",
     instructions=CONVERSION_CRO_INSTRUCTIONS,
     model=STANDARD,  # 🔵 standard — mirror of sonnet on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )

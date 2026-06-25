@@ -10,9 +10,10 @@ privacy-resilient top-down model (adstock, saturation, baseline, external factor
 the allocator, not the causal truth. Researches every estimate via WebSearchTool; invents nothing.
 """
 
-from agents import Agent, WebSearchTool
+from agents import Agent
 
 from ..models import ELITE
+from ..web import web_tools
 
 MMM_INSTRUCTIONS = """
 You are the MMM soldier in Officer 6's Measurement & Effectiveness squad. One method, done well:
@@ -66,5 +67,5 @@ mmm_soldier = Agent(
     handoff_description="Privacy-resilient MMM (Meridian): channel contribution + mROI allocation, experiment-calibrated (elite).",
     instructions=MMM_INSTRUCTIONS,
     model=ELITE,  # 🎖️ elite — mirror of opus on the Claude side
-    tools=[WebSearchTool()],
+    tools=web_tools(),
 )
