@@ -13,9 +13,10 @@ dependencies = ["openai-agents"]
 
 [project.optional-dependencies]
 dev = ["pytest"]
-# Gemini-powered web search (Google AI Studio grounding) — works with ANY brain model.
-# Set GEMINI_API_KEY and the soldiers research via Gemini instead of OpenAI's hosted tool.
-gemini = ["google-genai"]
+# Provider-agnostic FREE web-search backends (pick one via MK_SEARCH). Brain model is separate.
+gemini = ["google-genai"]    # Gemini grounding   — free 1.5k/day (GEMINI_API_KEY)
+tavily = ["tavily-python"]   # Tavily, LLM-clean  — free 1k/mo (TAVILY_API_KEY)
+ddg = ["ddgs"]               # DuckDuckGo         — free, no key (unofficial)
 # Non-OpenAI providers (Anthropic, Gemini, local, …) for the Python runtime,
 # via MK_ELITE_MODEL / MK_STANDARD_MODEL = "litellm/<provider>/<model>".
 litellm = ["openai-agents[litellm]"]

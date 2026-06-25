@@ -64,12 +64,21 @@ Secrets live in a local **`.env`** (gitignored, never committed): `OPENAI_API_KE
 (`MK_ELITE_MODEL` / `MK_STANDARD_MODEL`). It loads automatically (dependency-free) and its values
 override the shell for this project. On Python 3.9 the SDK also needs `pip install eval_type_backport`.
 
-**Web search is provider-agnostic.** OpenAI's hosted web search only works on OpenAI's platform,
-so soldiers can instead research via **Gemini's Google-Search grounding** — set `GEMINI_API_KEY`
-(Google AI Studio, free tier) and `pip install ".[gemini]"`, and every soldier gets live web
-search with **any** brain model (OpenAI, Anthropic, OpenRouter, or Gemini itself). The capability
-is selected centrally by `web.web_tools()`: `MK_WEBSEARCH=0` → none · `GEMINI_API_KEY` set →
-Gemini grounding · otherwise → OpenAI hosted.
+**Web search is provider-agnostic** — the brain model and the search backend are independent, so
+you can test any brain while keeping search **free**. OpenAI's hosted search only works on OpenAI's
+platform; pick a free backend with `MK_SEARCH`, selected centrally by `web.web_tools()`:
+
+| `MK_SEARCH` | Backend | Free tier | Setup |
+|-------------|---------|-----------|-------|
+| `ddg` | DuckDuckGo | free, no key, no quota (unofficial) | `pip install ".[ddg]"` |
+| `tavily` | Tavily (LLM-clean) | 1k/month | `TAVILY_API_KEY` + `".[tavily]"` |
+| `gemini` | Gemini grounding | 1.5k/day | `GEMINI_API_KEY` + `".[gemini]"` |
+| `openai` | OpenAI hosted | — | OpenAI brain only |
+| _(unset)_ | auto: Tavily key → Tavily · else Gemini key → Gemini · else OpenAI hosted | | |
+
+`MK_WEBSEARCH=0` disables web search entirely (units then say "unknown" rather than invent). Each
+backend is a provider-agnostic function-tool, so it works with **any** brain (OpenAI, Anthropic,
+OpenRouter, or Gemini).
 
 `marketing_kit/mission.py` is the deterministic runner: it carries a **Mission Dossier**, runs
 the army in two stages — **STRATEGISE** (Phases 0–2) → **BUILD** (Phases 3–6) — runs the

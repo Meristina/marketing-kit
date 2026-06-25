@@ -1,17 +1,21 @@
-"""Web-search capability — provider-agnostic, powered by Gemini's Google-Search grounding.
+"""Web-search capability — provider-agnostic, with selectable FREE backends.
 
 The army's "no invented facts" doctrine (Constitution Art. I) needs LIVE web access. OpenAI's
-hosted `WebSearchTool` only works when the brain runs on OpenAI's own platform — it breaks on
-Gemini / Anthropic / OpenRouter. This module is the single source of truth for the web capability
-every unit receives, selected by environment:
+hosted `WebSearchTool` only works when the brain runs on OpenAI's platform — it breaks on
+Gemini / Anthropic / OpenRouter. This module decouples the **brain model** (chosen in models.py)
+from the **search backend**, so you can test any brain while keeping search free.
 
-  MK_WEBSEARCH=0                          -> []                  (no web search; units say "unknown")
-  GEMINI_API_KEY / GOOGLE_API_KEY set    -> [gemini_web_search] (works with ANY brain model)
-  else                                   -> [WebSearchTool()]   (OpenAI hosted; OpenAI brain only)
+`web_tools()` is the single source of truth for the web capability every unit receives. Pick a
+backend with `MK_SEARCH` (or let it auto-detect from the keys present):
 
-So one Google AI Studio (Gemini) key gives every soldier real web search regardless of which model
-(OpenAI, Anthropic, OpenRouter, or Gemini itself) is doing the reasoning. The grade/brain model is
-chosen separately in models.py (ELITE / STANDARD).
+  MK_WEBSEARCH=0            -> [] (no web search; units must say "unknown")
+  MK_SEARCH=ddg            -> DuckDuckGo (ddgs)        FREE, no key, no quota (unofficial)
+  MK_SEARCH=tavily         -> Tavily (TAVILY_API_KEY)  free 1k/mo, LLM-clean output
+  MK_SEARCH=gemini         -> Gemini grounding (GEMINI_API_KEY) free 1.5k/day
+  MK_SEARCH=openai         -> OpenAI hosted WebSearchTool (OpenAI brain only)
+  (unset) -> auto: TAVILY_API_KEY -> tavily ; else GEMINI_API_KEY -> gemini ; else OpenAI hosted
+
+Each backend is a provider-agnostic function-tool: it works with ANY brain model.
 """
 
 import os
@@ -29,7 +33,7 @@ def _websearch_disabled() -> bool:
 
 @function_tool
 def gemini_web_search(query: str) -> str:
-    """Search the live web (Google Search, via Gemini grounding) and return a concise, SOURCED
+    """Search the live web (Google Search via Gemini grounding) and return a concise, SOURCED
     answer. Use for any real fact — market sizes, benchmarks, dates, competitor claims. Returns the
     grounded answer followed by source URLs; if nothing is found or the tool is unavailable, say so
     so the caller can mark the fact 'unknown' (never invent it)."""
@@ -38,7 +42,7 @@ def gemini_web_search(query: str) -> str:
         from google.genai import types
     except ImportError:
         return ('web_search unavailable: install the Gemini extra '
-                '(pip install "marketing-kit[gemini]") or set MK_WEBSEARCH=0.')
+                '(pip install "marketing-kit[gemini]") or pick another MK_SEARCH backend.')
     key = _gemini_key()
     if not key:
         return "web_search unavailable: set GEMINI_API_KEY (Google AI Studio) or MK_WEBSEARCH=0."
@@ -71,15 +75,86 @@ def gemini_web_search(query: str) -> str:
         return f"web_search error: {type(e).__name__}: {str(e)[:200]}"
 
 
+@function_tool
+def tavily_web_search(query: str) -> str:
+    """Search the live web (Tavily, built for LLM agents) and return a concise, SOURCED answer plus
+    source URLs. Use for any real fact. If nothing is found or the tool is unavailable, say so so
+    the caller can mark the fact 'unknown' (never invent it)."""
+    try:
+        from tavily import TavilyClient
+    except ImportError:
+        return ('web_search unavailable: install the Tavily extra '
+                '(pip install "marketing-kit[tavily]") or pick another MK_SEARCH backend.')
+    key = os.getenv("TAVILY_API_KEY")
+    if not key:
+        return "web_search unavailable: set TAVILY_API_KEY (free at tavily.com) or MK_WEBSEARCH=0."
+    try:
+        client = TavilyClient(api_key=key)
+        r = client.search(query, max_results=5, include_answer=True)
+        answer = (r.get("answer") or "").strip()
+        sources = [f"- {x.get('title', '')}: {x.get('url', '')}" for x in (r.get("results") or [])]
+        out = answer
+        if sources:
+            out += ("\n\n" if out else "") + "Sources:\n" + "\n".join(sources)
+        return out or "No result found."
+    except Exception as e:
+        return f"web_search error: {type(e).__name__}: {str(e)[:200]}"
+
+
+@function_tool
+def duckduckgo_web_search(query: str) -> str:
+    """Search the live web (DuckDuckGo — free, no API key) and return the top results (title,
+    snippet, URL) for the caller to cite. Use for any real fact. If nothing is found or the tool is
+    unavailable, say so so the caller can mark the fact 'unknown' (never invent it)."""
+    try:
+        try:
+            from ddgs import DDGS
+        except ImportError:
+            from duckduckgo_search import DDGS  # older package name
+    except ImportError:
+        return ('web_search unavailable: install the DuckDuckGo extra '
+                '(pip install "marketing-kit[ddg]") or pick another MK_SEARCH backend.')
+    try:
+        results = []
+        with DDGS() as ddg:
+            for r in ddg.text(query, max_results=5):
+                results.append(r)
+        if not results:
+            return "No result found."
+        lines = []
+        for r in results:
+            title = r.get("title", "")
+            body = r.get("body", "")
+            href = r.get("href") or r.get("url", "")
+            lines.append(f"- {title}: {body}\n  {href}")
+        return "Results (DuckDuckGo):\n" + "\n".join(lines)
+    except Exception as e:
+        return f"web_search error: {type(e).__name__}: {str(e)[:200]}"
+
+
+_BACKENDS = {
+    "ddg": lambda: [duckduckgo_web_search],
+    "duckduckgo": lambda: [duckduckgo_web_search],
+    "tavily": lambda: [tavily_web_search],
+    "gemini": lambda: [gemini_web_search],
+    "openai": lambda: [WebSearchTool()],
+}
+
+
 def web_tools() -> list:
     """The web-search capability every unit receives, selected by env. Single source of truth.
 
-    - MK_WEBSEARCH=0           -> no web search
-    - GEMINI_API_KEY present   -> Gemini Google-Search grounding (any brain model)
-    - otherwise                -> OpenAI hosted WebSearchTool (OpenAI brain only)
+    Explicit `MK_SEARCH` wins; otherwise auto-detect from the keys present (Tavily, then Gemini),
+    falling back to OpenAI's hosted WebSearchTool. `MK_WEBSEARCH=0` disables web search entirely.
     """
     if _websearch_disabled():
         return []
+    choice = os.getenv("MK_SEARCH", "").strip().lower()
+    if choice in _BACKENDS:
+        return _BACKENDS[choice]()
+    # auto-detect a provider-agnostic backend (DDG is opt-in only — unofficial/less reliable)
+    if os.getenv("TAVILY_API_KEY"):
+        return [tavily_web_search]
     if _gemini_key():
         return [gemini_web_search]
     return [WebSearchTool()]

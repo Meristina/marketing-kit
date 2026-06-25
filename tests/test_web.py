@@ -1,19 +1,22 @@
 """Web-search selector tests — offline (no SDK, no network).
 
-web_tools() is the single source of truth for the web capability every unit receives. We stub the
-`agents` SDK (web.py imports WebSearchTool + function_tool from it) and assert the selection by env:
-- MK_WEBSEARCH=0           -> no web search
-- GEMINI_API_KEY present   -> Gemini Google-Search grounding (works with any brain model)
-- otherwise                -> OpenAI hosted WebSearchTool (OpenAI brain only)
+web_tools() is the single source of truth for the web capability every unit receives. The `agents`
+SDK is stubbed in tests/conftest.py. These tests assert WHICH backend is selected by env — they
+never execute a backend (no network). The "unavailable" tests check the graceful no-key path, which
+returns before any API call.
 """
 
 from marketing_kit import web  # the `agents` SDK is stubbed in tests/conftest.py
 
+_ENV = ("MK_WEBSEARCH", "MK_SEARCH", "GEMINI_API_KEY", "GOOGLE_API_KEY", "TAVILY_API_KEY")
+
 
 def _clear(monkeypatch):
-    for v in ("MK_WEBSEARCH", "GEMINI_API_KEY", "GOOGLE_API_KEY"):
+    for v in _ENV:
         monkeypatch.delenv(v, raising=False)
 
+
+# ---- disable ----------------------------------------------------------------
 
 def test_disabled_returns_no_tools(monkeypatch):
     _clear(monkeypatch)
@@ -21,30 +24,69 @@ def test_disabled_returns_no_tools(monkeypatch):
     assert web.web_tools() == []
 
 
-def test_gemini_key_selects_grounded_search(monkeypatch):
-    # a Gemini key -> the provider-agnostic grounded search tool (works with ANY brain)
+# ---- explicit MK_SEARCH backend selection -----------------------------------
+
+def test_mk_search_ddg(monkeypatch):
     _clear(monkeypatch)
-    monkeypatch.setenv("GEMINI_API_KEY", "test-key")
-    tools = web.web_tools()
-    assert tools == [web.gemini_web_search]
+    monkeypatch.setenv("MK_SEARCH", "ddg")
+    assert web.web_tools() == [web.duckduckgo_web_search]
 
 
-def test_google_api_key_also_selects_grounded_search(monkeypatch):
+def test_mk_search_tavily(monkeypatch):
     _clear(monkeypatch)
-    monkeypatch.setenv("GOOGLE_API_KEY", "test-key")
+    monkeypatch.setenv("MK_SEARCH", "tavily")
+    assert web.web_tools() == [web.tavily_web_search]
+
+
+def test_mk_search_gemini(monkeypatch):
+    _clear(monkeypatch)
+    monkeypatch.setenv("MK_SEARCH", "gemini")
     assert web.web_tools() == [web.gemini_web_search]
 
 
-def test_default_falls_back_to_openai_hosted(monkeypatch):
-    # no Gemini key, not disabled -> the OpenAI hosted WebSearchTool
+def test_mk_search_openai(monkeypatch):
+    _clear(monkeypatch)
+    monkeypatch.setenv("MK_SEARCH", "openai")
+    tools = web.web_tools()
+    assert len(tools) == 1 and type(tools[0]).__name__ == "WebSearchTool"
+
+
+# ---- auto-detection (no MK_SEARCH) ------------------------------------------
+
+def test_auto_prefers_tavily_key(monkeypatch):
+    _clear(monkeypatch)
+    monkeypatch.setenv("TAVILY_API_KEY", "x")
+    monkeypatch.setenv("GEMINI_API_KEY", "y")  # tavily wins the auto order
+    assert web.web_tools() == [web.tavily_web_search]
+
+
+def test_auto_gemini_key(monkeypatch):
+    _clear(monkeypatch)
+    monkeypatch.setenv("GEMINI_API_KEY", "y")
+    assert web.web_tools() == [web.gemini_web_search]
+
+
+def test_auto_default_openai_hosted(monkeypatch):
     _clear(monkeypatch)
     tools = web.web_tools()
     assert len(tools) == 1 and type(tools[0]).__name__ == "WebSearchTool"
 
 
-def test_gemini_search_unavailable_without_genai(monkeypatch):
-    # the function returns a graceful "unavailable" string (never raises) when the SDK/key is absent
+def test_ddg_is_opt_in_only_not_auto(monkeypatch):
+    # DDG is unofficial -> never auto-selected; only via explicit MK_SEARCH=ddg
     _clear(monkeypatch)
-    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    assert web.web_tools() != [web.duckduckgo_web_search]
+
+
+# ---- graceful no-key path (no network: returns before any API call) ---------
+
+def test_gemini_search_unavailable_without_key(monkeypatch):
+    _clear(monkeypatch)
     out = web.gemini_web_search("what is the TAM of X")
+    assert isinstance(out, str) and "unavailable" in out.lower()
+
+
+def test_tavily_search_unavailable_without_key(monkeypatch):
+    _clear(monkeypatch)
+    out = web.tavily_web_search("what is the TAM of X")
     assert isinstance(out, str) and "unavailable" in out.lower()
